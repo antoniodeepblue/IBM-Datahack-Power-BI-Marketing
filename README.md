@@ -2,7 +2,11 @@
 ### Noviembre 2024
 #### *Autor:* Antonio Fernández
 
-Análisis del Proyecto Final de Data Analytics con Power BI.  Proyecto final para el curso de Data Analytics con Power BI, enfocado en el análisis de datos de campañas de marketing.
+### Análisis del Proyecto Final de Data Analytics con Power BI. 
+
+#### Proyecto final para el curso de Data Analytics con Power BI, enfocado en el análisis de datos de campañas de marketing.
+
+![image](https://github.com/user-attachments/assets/32b57fbb-8b26-4606-83dd-b21a388302e1)
 
 ## Objetivo del Proyecto:
 

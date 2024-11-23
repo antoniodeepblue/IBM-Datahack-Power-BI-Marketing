@@ -4,6 +4,9 @@
 
 ### Análisis del Proyecto Final de Data Analytics con Power BI. 
 
+#### Acceso al informe en línea en el Servicio Power BI:
+https://app.powerbi.com/view?r=eyJrIjoiMWJlZTY5ZDUtODhkZC00YjMxLWFlOGUtMzQ0ZDNkOTVhZTZmIiwidCI6ImFlYzc2MmU0LTNkNTQtNDk1ZS1hOGZlLTQyODdkY2U2ZmU2OSIsImMiOjh9
+
 #### Proyecto final para el curso de Data Analytics con Power BI, enfocado en el análisis de datos de campañas de marketing.
 
 ![image](https://github.com/user-attachments/assets/32b57fbb-8b26-4606-83dd-b21a388302e1)

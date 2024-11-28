@@ -1,0 +1,169 @@
+﻿DEFINE 
+---- MODEL MEASURES BEGIN ----
+MEASURE 'DAX_Contenedor Medidas'[% Compras Catalogo] = 
+DIVIDE (
+    'DAX_Contenedor Medidas'[Compras Catologo] * 100,
+    ( 'DAX_Contenedor Medidas'[Total Compras] )
+)
+MEASURE 'DAX_Contenedor Medidas'[% Compras Oferta] = 
+DIVIDE (
+    'DAX_Contenedor Medidas'[Compras Oferta] * 100,
+    ( 'DAX_Contenedor Medidas'[Total Compras] )
+)
+MEASURE 'DAX_Contenedor Medidas'[% Compras Tienda] = DIVIDE('DAX_Contenedor Medidas'[Compras Tienda] *100, ('DAX_Contenedor Medidas'[Total Compras]))
+MEASURE 'DAX_Contenedor Medidas'[% Compras Web] = DIVIDE('DAX_Contenedor Medidas'[Compras Web] *100, ('DAX_Contenedor Medidas'[Total Compras]))
+MEASURE 'DAX_Contenedor Medidas'[Beneficio Total] = 'DAX_Contenedor Medidas'[Total Gasto Clientes] + 'DAX_Contenedor Medidas'[Total Ingresos Fijos]
+MEASURE 'DAX_Contenedor Medidas'[Clientes No tienen  hijos] = CALCULATE(
+    COUNT(f_Clientes[ID_cliente]),
+    f_Clientes[Cant niños hogar] = 0 && f_Clientes[Cant Adltes hogar] = 0
+)
+MEASURE 'DAX_Contenedor Medidas'[Clientes SI tienen  hijos] = CALCULATE(
+    DISTINCTCOUNT(f_Clientes[ID_cliente]),
+    f_Clientes[Cant niños hogar] <> 0 || f_Clientes[Cant Adltes hogar] <> 0
+)
+MEASURE 'DAX_Contenedor Medidas'[Compras Catologo] = 
+CALCULATE(SUM(f_PlataformaCompra[NúmeroCompras]),
+    'd_TipoPlataformaCompra'[ID_PlataformaCompra] = 3
+)
+
+MEASURE 'DAX_Contenedor Medidas'[Compras Oferta] = 
+CALCULATE(SUM(f_PlataformaCompra[NúmeroCompras]),
+    'd_TipoPlataformaCompra'[ID_PlataformaCompra] = 1
+)
+MEASURE 'DAX_Contenedor Medidas'[Compras Tienda] = 
+CALCULATE(SUM(f_PlataformaCompra[NúmeroCompras]),
+    'd_TipoPlataformaCompra'[ID_PlataformaCompra] = 4
+)
+MEASURE 'DAX_Contenedor Medidas'[Compras Web] = 
+CALCULATE(SUM(f_PlataformaCompra[NúmeroCompras]),
+    'd_TipoPlataformaCompra'[ID_PlataformaCompra] = 2
+)
+MEASURE 'DAX_Contenedor Medidas'[Edad] = YEAR(TODAY()) - SUM(f_Comportamiento[Año de nacimiento])
+MEASURE 'DAX_Contenedor Medidas'[Gasto carne] = 
+(SUM(f_TablaHechos[Cant gast carne])
+)
+MEASURE 'DAX_Contenedor Medidas'[Gasto Dulces] = 
+(SUM(f_TablaHechos[Cant gast dulces])
+)
+MEASURE 'DAX_Contenedor Medidas'[Gasto Fruta] = 
+(SUM(f_TablaHechos[Cant gast fruta])
+)
+MEASURE 'DAX_Contenedor Medidas'[Gasto Medio Clientes] = AVERAGE(f_Productos[Cantidad gastada])
+MEASURE 'DAX_Contenedor Medidas'[Gasto Oro] = 
+(SUM(f_TablaHechos[Cant gast prod oro])
+)
+MEASURE 'DAX_Contenedor Medidas'[Gasto Pescado] = 
+(SUM(f_TablaHechos[Cant gast pescado])
+)
+MEASURE 'DAX_Contenedor Medidas'[Gasto vino] = 
+(SUM(f_TablaHechos[Cant gast vino])
+)
+MEASURE 'DAX_Contenedor Medidas'[Ingreso Medio Clientes] = AVERAGE(f_Clientes[Ingresos])
+MEASURE 'DAX_Contenedor Medidas'[Nº Campañas] = 
+CALCULATE(COUNTROWS('d_TipoCampaña'),
+    ('d_TipoCampaña'[ID_Campaña]<> 6)
+)
+MEASURE 'DAX_Contenedor Medidas'[Nº Campañas+Respuesta] = 
+COUNTROWS('d_TipoCampaña')
+MEASURE 'DAX_Contenedor Medidas'[Nº Casad+Pare] = 
+CALCULATE(
+    DISTINCTCOUNT(f_Clientes[ID_cliente]),
+    d_EstadoCivil[ID_EstadoCivil] = 2 || d_EstadoCivil[ID_EstadoCivil] = 3
+)
+
+MEASURE 'DAX_Contenedor Medidas'[Nº Divor+Viudos] = 
+CALCULATE(
+    DISTINCTCOUNT(f_Clientes[ID_cliente]),
+    d_EstadoCivil[ID_EstadoCivil] = 4 || d_EstadoCivil[ID_EstadoCivil] = 5
+)
+MEASURE 'DAX_Contenedor Medidas'[Nº Plataformas Compra] = 
+COUNTROWS(d_TipoPlataformaCompra)
+MEASURE 'DAX_Contenedor Medidas'[Nº Productos] = 
+COUNTROWS(d_TipoProducto)
+MEASURE 'DAX_Contenedor Medidas'[Nº Solteros] = 
+CALCULATE(
+    DISTINCTCOUNT(f_Clientes[ID_cliente]),
+    d_EstadoCivil[ID_EstadoCivil] = 1
+)
+ 
+MEASURE 'DAX_Contenedor Medidas'[Promedio Edad Clientes] = ROUND(AVERAGE(f_Comportamiento[Años]), 0)
+MEASURE 'DAX_Contenedor Medidas'[Tasa de Repuesta Campaña] = DIVIDE(SUM('f_Campañas'[RespuestaCampaña]), COUNTROWS('f_Campañas'), 0)
+
+MEASURE 'DAX_Contenedor Medidas'[Tasa Quejas Clientes] = DIVIDE(SUM('f_TablaHechos'[Queja]), COUNTROWS('f_TablaHechos'), 0)
+
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campaña 1] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    ('f_Campañas'[ID_Campaña] = 1) && ('f_Campañas'[RespuestaCampaña] = 1)
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campaña 2] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    ('f_Campañas'[ID_Campaña] = 2) && ('f_Campañas'[RespuestaCampaña] = 1)
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campaña 3] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    ('f_Campañas'[ID_Campaña] = 3) && ('f_Campañas'[RespuestaCampaña] = 1)
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campaña 4] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    ('f_Campañas'[ID_Campaña] = 4) && ('f_Campañas'[RespuestaCampaña] = 1)
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campaña 5] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    ('f_Campañas'[ID_Campaña] = 5) && ('f_Campañas'[RespuestaCampaña] = 1)
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campañas] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    'f_Campañas'[RespuestaCampaña] = 1
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Campañas+] = [Total Aceptadas Campaña 1] + [Total Aceptadas Campaña 2] + [Total Aceptadas Campaña 3] + [Total Aceptadas Campaña 4] + [Total Aceptadas Campaña 5]
+
+MEASURE 'DAX_Contenedor Medidas'[Total Aceptadas Ultima Campaña] = 
+CALCULATE(COUNTROWS('f_Campañas'),
+    ('f_Campañas'[ID_Campaña] = 6) && ('f_Campañas'[RespuestaCampaña] = 1)
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Clientes] = 
+COUNTROWS(f_Clientes)
+MEASURE 'DAX_Contenedor Medidas'[Total CLIENTES NOBLANK] = IF( ISBLANK(COUNTROWS(f_Clientes) ), 0, COUNTROWS(f_Clientes) )
+MEASURE 'DAX_Contenedor Medidas'[Total ClientesComportamiento] = 
+COUNTROWS(f_Comportamiento)
+MEASURE 'DAX_Contenedor Medidas'[Total Compras] = 
+CALCULATE(SUM(f_PlataformaCompra[NúmeroCompras]),
+    'd_TipoPlataformaCompra'[ID_PlataformaCompra] 
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Gasto Clientes] = 
+SUM(f_productos[Cantidad gastada])
+MEASURE 'DAX_Contenedor Medidas'[Total Gasto Fijo Contacto] = 
+SUM(f_TablaHechos[Costo fijo Contacto])
+MEASURE 'DAX_Contenedor Medidas'[Total Ingreso Fijo Campañas] = 
+SUM(f_TablaHechos[Ingresos campaña])
+MEASURE 'DAX_Contenedor Medidas'[Total Ingresos Fijos] = 'DAX_Contenedor Medidas'[Total Ingreso Fijo Campañas] - 'DAX_Contenedor Medidas'[Total Gasto Fijo Contacto]
+
+MEASURE 'DAX_Contenedor Medidas'[Total nº compras] = 
+SUM(f_PlataformaCompra[NúmeroCompras])
+MEASURE 'DAX_Contenedor Medidas'[Total Nº Compras Carne] = 
+CALCULATE(SUM(f_Productos[ID_TipoProducto]),
+    'd_TipoProducto'[ID_TipoProducto] = 3
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Nº Compras Dulce] = 
+CALCULATE(SUM(f_Productos[ID_TipoProducto]),
+    'd_TipoProducto'[ID_TipoProducto] = 5
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Nº Compras Fruta] = 
+CALCULATE(SUM(f_Productos[ID_TipoProducto]),
+    'd_TipoProducto'[ID_TipoProducto] = 2
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Nº Compras Oro] = 
+CALCULATE(SUM(f_Productos[ID_TipoProducto]),
+    'd_TipoProducto'[ID_TipoProducto] = 6
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Nº Compras Pescado] = 
+CALCULATE(SUM(f_Productos[ID_TipoProducto]),
+    'd_TipoProducto'[ID_TipoProducto] = 4
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Nº Compras Vino] = 
+CALCULATE(SUM(f_Productos[ID_TipoProducto]),
+    'd_TipoProducto'[ID_TipoProducto] = 1
+)
+MEASURE 'DAX_Contenedor Medidas'[Total Quejas] = SUM(f_TablaHechos[Queja])
+---- MODEL MEASURES END ----
+
